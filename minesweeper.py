@@ -59,23 +59,23 @@ class MinesweeperUI:
 
     def create_start_menu(self):
         self.clear_root()
-        self.root.geometry("300x200")
+        self.root.geometry("500x300")
 
-        tk.Label(self.root,bg="#2f3640" , fg="white", text="Grid Size:").pack(pady=10)
-        self.grid_size_entry = tk.Entry(self.root,bg="#212a33",fg="white")
-        self.grid_size_entry.pack(pady=5)
+        tk.Label(self.root,bg="#2f3640" , fg="white", text="Grid Size:(Max 15)",font=("Arial", 14)).pack(pady=20)
+        self.grid_size_entry = tk.Entry(self.root,bg="#212a33",fg="white",font=("Arial", 14))
+        self.grid_size_entry.pack(pady=2)
 
-        tk.Label(self.root,bg="#2f3640" , fg="white",text="Number of Mines:").pack(pady=10)
-        self.mine_count_entry = tk.Entry(self.root,bg="#212a33",fg="white")
-        self.mine_count_entry.pack(pady=5)
+        tk.Label(self.root,bg="#2f3640" , fg="white",text="Number of Mines:",font=("Arial", 14)).pack(pady=20)
+        self.mine_count_entry = tk.Entry(self.root,bg="#212a33",fg="white",font=("Arial", 14))
+        self.mine_count_entry.pack(pady=2)
 
-        tk.Button(self.root, text="Start Game", bg="#f4af03",command=self.start_game).pack(pady=20)
+        tk.Button(self.root, text="Start Game", bg="#f4af03",command=self.start_game,font=("Arial", 14)).pack(pady=20)
 
     def start_game(self):
         try:
             side_length = int(self.grid_size_entry.get())
             bomb_amount = int(self.mine_count_entry.get())
-            if side_length <= 0 or bomb_amount <= 0 or bomb_amount >= side_length * side_length:
+            if side_length <= 0 or bomb_amount <= 0 or bomb_amount >= side_length * side_length or side_length > 15:
                 raise ValueError("Invalid grid size or number of mines.")
         except ValueError as e:
             messagebox.showerror("Error", f"Invalid input: {e}")
