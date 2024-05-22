@@ -3,6 +3,8 @@ from tkinter import messagebox
 from functools import partial
 import random
 
+#Hello
+
 class Cell:
     def __init__(self, is_bomb=False):
         self.is_bomb = is_bomb
