@@ -53,6 +53,7 @@ class MinesweeperUI:
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("Minesweeper")
+        self.root.config(bg="#171e28")
         self.create_start_menu()
         self.root.mainloop()
 
@@ -60,15 +61,15 @@ class MinesweeperUI:
         self.clear_root()
         self.root.geometry("300x200")
 
-        tk.Label(self.root, text="Grid Size:").pack(pady=10)
-        self.grid_size_entry = tk.Entry(self.root)
+        tk.Label(self.root,bg="#2f3640" , fg="white", text="Grid Size:").pack(pady=10)
+        self.grid_size_entry = tk.Entry(self.root,bg="#212a33",fg="white")
         self.grid_size_entry.pack(pady=5)
 
-        tk.Label(self.root, text="Number of Mines:").pack(pady=10)
-        self.mine_count_entry = tk.Entry(self.root)
+        tk.Label(self.root,bg="#2f3640" , fg="white",text="Number of Mines:").pack(pady=10)
+        self.mine_count_entry = tk.Entry(self.root,bg="#212a33",fg="white")
         self.mine_count_entry.pack(pady=5)
 
-        tk.Button(self.root, text="Start Game", command=self.start_game).pack(pady=20)
+        tk.Button(self.root, text="Start Game", bg="#f4af03",command=self.start_game).pack(pady=20)
 
     def start_game(self):
         try:
@@ -92,7 +93,7 @@ class MinesweeperUI:
         for i in range(self.side_length):
             row_buttons = []
             for j in range(self.side_length):
-                button = tk.Button(self.root, text='', width=button_size // 10, height=button_size // 20, font=("Arial", 14), command=partial(self.click, i, j))
+                button = tk.Button(self.root,bg="#2f3640",text='', width=button_size // 10, height=button_size // 20, font=("Arial", 14), command=partial(self.click, i, j))
                 button.grid(row=i, column=j, padx=1, pady=1)  
                 button.bind('<Button-3>', partial(self.flag, x=i, y=j))
                 row_buttons.append(button)
@@ -104,9 +105,7 @@ class MinesweeperUI:
         grid_width = self.root.winfo_reqwidth()
         grid_height = self.root.winfo_reqheight()
 
-        
-        extra_space = 20
-        self.root.geometry(f"{grid_width + extra_space}x{grid_height + extra_space}")
+        self.root.geometry(f"{grid_width }x{grid_height }")
 
     def click(self, x, y):
         cell = self.game.grid[x][y]
@@ -116,12 +115,12 @@ class MinesweeperUI:
             return
 
         if cell.is_bomb:
-            button.config(text='💣', state='disabled')
+            button.config(text='💣', state='disabled', bg= "red")
             self.show_game_over()
         else:
             cell.is_revealed = True
             self.game.revealed_cells += 1
-            button.config(text=str(cell.adjacent_bombs), state='disabled')
+            button.config(text=str(cell.adjacent_bombs), state='disabled',bg = "white")
             if cell.adjacent_bombs == 0:
                 self.reveal_empty(x, y)
             self.check_win()
@@ -138,7 +137,7 @@ class MinesweeperUI:
             button.config(text='', font=("Arial", 14))
         else:
             cell.is_flagged = True
-            button.config(text='🚩', font=("Arial", 14))
+            button.config(text='🚩', font=("Arial", 14), bg = "#f4af03")
 
     def reveal_empty(self, x, y):
         for i in range(-1, 2):
@@ -160,7 +159,7 @@ class MinesweeperUI:
 
     def show_game_over(self):
         self.reveal_all_bombs()
-        response = messagebox.askquestion("Virus.exe started successfully", "Game Over! Do you want to play again?")
+        response = messagebox.askquestion("GG", "Game Over! Do you want to play again?")
         if response == 'yes':
             self.create_start_menu()
         else:
