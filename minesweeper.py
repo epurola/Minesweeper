@@ -3,12 +3,15 @@ from tkinter import messagebox
 from functools import partial
 import MinesweeperGame
 
-
+BACKGROUND = "#171e28"
+BACKGROUNDLIGHT ="#212a33"
+BUTTON = "#f4af03"
+CELL="#2f3640"
 class MinesweeperUI:
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("Minesweeper")
-        self.root.config(bg="#171e28")
+        self.root.config(bg=BACKGROUND)
         self.create_start_menu()
         self.root.mainloop()
 
@@ -16,15 +19,15 @@ class MinesweeperUI:
         self.clear_root()
         self.root.geometry("500x300")
 
-        tk.Label(self.root,bg="#2f3640" , fg="white", text="Grid Size:(Max 15)",font=("Arial", 14)).pack(pady=20)
-        self.grid_size_entry = tk.Entry(self.root,bg="#212a33",fg="white",font=("Arial", 14))
+        tk.Label(self.root,bg=BACKGROUND , fg="white", text="Grid Size:(Max 15)",font=("Arial", 14)).pack(pady=20)
+        self.grid_size_entry = tk.Entry(self.root,bg=BACKGROUNDLIGHT,fg="white",font=("Arial", 14))
         self.grid_size_entry.pack(pady=2)
 
-        tk.Label(self.root,bg="#2f3640" , fg="white",text="Number of Mines:",font=("Arial", 14)).pack(pady=20)
-        self.mine_count_entry = tk.Entry(self.root,bg="#212a33",fg="white",font=("Arial", 14))
+        tk.Label(self.root,bg=BACKGROUND, fg="white",text="Number of Mines:(Max Grid size * Grid size - 1)",font=("Arial", 14)).pack(pady=20)
+        self.mine_count_entry = tk.Entry(self.root,bg=BACKGROUNDLIGHT,fg="white",font=("Arial", 14))
         self.mine_count_entry.pack(pady=2)
 
-        tk.Button(self.root, text="Start Game", bg="#f4af03",command=self.start_game,font=("Arial", 14)).pack(pady=20)
+        tk.Button(self.root, text="Start Game", bg=BUTTON,command=self.start_game,font=("Arial", 14)).pack(pady=20)
 
     def start_game(self):
         try:
@@ -48,7 +51,7 @@ class MinesweeperUI:
         for i in range(self.side_length):
             row_buttons = []
             for j in range(self.side_length):
-                button = tk.Button(self.root,bg="#2f3640",text='', width=button_size // 10, height=button_size // 20, font=("Arial", 14), command=partial(self.click, i, j))
+                button = tk.Button(self.root,bg=CELL,text='', width=button_size // 10, height=button_size // 20, font=("Arial", 14), command=partial(self.click, i, j))
                 button.grid(row=i, column=j, padx=1, pady=1)  
                 button.bind('<Button-3>', partial(self.flag, x=i, y=j))
                 row_buttons.append(button)
@@ -89,7 +92,7 @@ class MinesweeperUI:
 
         if cell.is_flagged:
             cell.is_flagged = False
-            button.config(text='', font=("Arial", 14))
+            button.config(text='', font=("Arial", 14),bg = CELL)
         else:
             cell.is_flagged = True
             button.config(text='🚩', font=("Arial", 14), bg = "#f4af03")
@@ -114,7 +117,7 @@ class MinesweeperUI:
 
     def show_game_over(self):
         self.reveal_all_bombs()
-        response = messagebox.askquestion("GG", "Game Over! Do you want to play again?")
+        response = messagebox.askquestion("Game Over", "Game Over! Do you want to play again?")
         if response == 'yes':
             self.create_start_menu()
         else:
