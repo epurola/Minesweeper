@@ -27,17 +27,35 @@ class MinesweeperUI:
         ctk.CTkButton(self.root, text="Start Game", fg_color=BUTTON, text_color="black", command=self.start_original_game, font=("Arial", 14)).pack(pady=20)
         ctk.CTkButton(self.root, text="Custom Game", fg_color=BUTTON, text_color="black", command=self.launch_custom_game_settings, font=("Arial", 14)).pack(pady=20)
         
+    def update_mine_count_max(self):
+        width = self.grid_width_entry.get()
+        height = self.grid_height_entry.get()
+        max_mines = width * height - 1 
+        if self.mine_count_entry.get() > max_mines:
+         try:
+          self.mine_count_entry.set(max_mines)
+         except ZeroDivisionError:
+          self.update_grid_mines_label(self.mine_count_entry.get()) 
+           
     def update_grid_width_label(self,value):
-    
-     self.my_label.configure(text=str(value))
+        self.my_label.configure(text=str(value))
+        #Dynamically updates the max minecount label
+        self.update_mine_count_max()
+        mines = self.mine_count_entry.get()
+        self.mine_count_entry.set(mines)
+        self.update_grid_mines_label(mines)
      
     def update_grid_mines_label(self,value):
-    
-     self.my_label_mines.configure(text=str(value))
+        self.my_label_mines.configure(text=str(value))
      
     def update_grid_height_label(self,value):
-    
-     self.height.configure(text=str(value))
+        self.height.configure(text=str(value))
+        #Dynamically updates the max minecount label
+        self.update_mine_count_max()
+        mines = self.mine_count_entry.get()
+        self.mine_count_entry.set(mines)
+        self.update_grid_mines_label(mines)
+     
         
     def launch_custom_game_settings(self):
         self.clear_root()
@@ -64,7 +82,9 @@ class MinesweeperUI:
         # Button to start the custom game
         ctk.CTkButton(master=settings_frame, text="Start Custom Game", fg_color=BUTTON, text_color="black", command=self.start_game, font=("Arial", 14)).pack(pady=10)
         # Back button to return to the main menu
-        ctk.CTkButton(master=settings_frame, text="Back", fg_color=BACKGROUNDLIGHT, text_color="white", command=self.create_start_menu, font=("Arial", 14)).pack(pady=10)
+        self.back = ctk.CTkButton(master=settings_frame, text="Back", fg_color=BACKGROUNDLIGHT, text_color="white", command=self.create_start_menu, font=("Arial", 14))
+        self.back.pack(pady=10)
+
 
     def start_game(self):
         try:
