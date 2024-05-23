@@ -1,69 +1,117 @@
-import tkinter as tk
-from tkinter import messagebox
+import customtkinter as ctk
+from tkinter import Label, PhotoImage, Scale, StringVar, messagebox
 from functools import partial
 import MinesweeperGame
 
-BACKGROUND = "#171e28"
-BACKGROUNDLIGHT ="#212a33"
-BUTTON = "#f4af03"
-CELL="#2f3640"
+BACKGROUND = "#171e28"  # Darkblue
+BACKGROUNDLIGHT = "#212a33"  # Gray/blue
+BUTTON = "#f4af03"  # Yellowish
+CELL = "#2f3640"  # Darkblue
+
 class MinesweeperUI:
+
     def __init__(self):
-        self.root = tk.Tk()
+        ctk.set_appearance_mode("dark")
+        ctk.set_default_color_theme("dark-blue")
+        ctk.deactivate_automatic_dpi_awareness()
+        self.root = ctk.CTk()
         self.root.title("Minesweeper")
         self.root.config(bg=BACKGROUND)
         self.create_start_menu()
         self.root.mainloop()
-
+        
     def create_start_menu(self):
         self.clear_root()
-        self.root.geometry("500x300")
-
-        tk.Label(self.root,bg=BACKGROUND , fg="white", text="Grid Size:(Max 15)",font=("Arial", 14)).pack(pady=20)
-        self.grid_size_entry = tk.Entry(self.root,bg=BACKGROUNDLIGHT,fg="white",font=("Arial", 14))
-        self.grid_size_entry.pack(pady=2)
-
-        tk.Label(self.root,bg=BACKGROUND, fg="white",text="Number of Mines:(Max Grid size * Grid size - 1)",font=("Arial", 14)).pack(pady=20)
-        self.mine_count_entry = tk.Entry(self.root,bg=BACKGROUNDLIGHT,fg="white",font=("Arial", 14))
+        self.root.geometry("500x400")
+        ctk.CTkLabel(master=self.root, bg_color=BACKGROUND, text="Traditional Game 16x30", text_color="white", font=("Arial", 14)).pack(pady=20)
+        ctk.CTkButton(self.root, text="Start Game", fg_color=BUTTON, text_color="black", command=self.start_original_game, font=("Arial", 14)).pack(pady=20)
+        ctk.CTkButton(self.root, text="Custom Game", fg_color=BUTTON, text_color="black", command=self.launch_custom_game_settings, font=("Arial", 14)).pack(pady=20)
+        
+    def update_grid_width_label(self,value):
+    
+     self.my_label.configure(text=str(value))
+     
+    def update_grid_mines_label(self,value):
+    
+     self.my_label_mines.configure(text=str(value))
+     
+    def update_grid_height_label(self,value):
+    
+     self.height.configure(text=str(value))
+        
+    def launch_custom_game_settings(self):
+        self.clear_root()
+        settings_frame = ctk.CTkFrame(master=self.root, bg_color=BACKGROUND)
+        settings_frame.pack(pady=20, padx=20, fill="both", expand=True)
+        # Grid width slider)
+        self.grid_width_entry = ctk.CTkSlider(master=settings_frame, from_=1, to=30, number_of_steps=29, bg_color=BACKGROUNDLIGHT, command = self.update_grid_width_label)
+        self.my_label = ctk.CTkLabel(master=settings_frame, text=self.grid_width_entry.get()  , text_color="white", font=("Arial", 14))
+        self.my_label.pack(pady=10)
+        self.grid_width_entry.pack(pady=2)
+        self.grid_width_entry.set(10)
+        # Grid height slider
+        self.grid_height_entry = ctk.CTkSlider(master=settings_frame, from_=1, to=30, number_of_steps=29, bg_color=BACKGROUNDLIGHT,command= self.update_grid_height_label)
+        self.height=ctk.CTkLabel(master=settings_frame,  text=self.grid_height_entry.get(), text_color="white", font=("Arial", 14))
+        self.height.pack(pady=10)
+        self.grid_height_entry.pack(pady=2)
+        self.grid_height_entry.set(10)
+        # Number of mines slider
+        self.mine_count_entry = ctk.CTkSlider(master=settings_frame, from_=1, to=400, number_of_steps=399, bg_color=BACKGROUNDLIGHT,command = self.update_grid_mines_label)
+        self.my_label_mines=ctk.CTkLabel(master=settings_frame,  text= self.mine_count_entry.get(), text_color="white", font=("Arial", 14))
+        self.my_label_mines.pack(pady=10)
         self.mine_count_entry.pack(pady=2)
-
-        tk.Button(self.root, text="Start Game", bg=BUTTON,command=self.start_game,font=("Arial", 14)).pack(pady=20)
+        self.mine_count_entry.set(40)
+        # Button to start the custom game
+        ctk.CTkButton(master=settings_frame, text="Start Custom Game", fg_color=BUTTON, text_color="black", command=self.start_game, font=("Arial", 14)).pack(pady=10)
+        # Back button to return to the main menu
+        ctk.CTkButton(master=settings_frame, text="Back", fg_color=BACKGROUNDLIGHT, text_color="white", command=self.create_start_menu, font=("Arial", 14)).pack(pady=10)
 
     def start_game(self):
         try:
-            side_length = int(self.grid_size_entry.get())
+            width = int(self.grid_width_entry.get())
+            height = int(self.grid_height_entry.get())
             bomb_amount = int(self.mine_count_entry.get())
-            if side_length <= 0 or bomb_amount <= 0 or bomb_amount >= side_length * side_length or side_length > 15:
+            if width <= 0 or height <= 0 or bomb_amount <= 0 or bomb_amount >= width * height or width > 30 or height > 30:
                 raise ValueError("Invalid grid size or number of mines.")
         except ValueError as e:
             messagebox.showerror("Error", f"Invalid input: {e}")
             return
-        
-        self.side_length = side_length
+
+        self.width = width
+        self.height = height
         self.bomb_amount = bomb_amount
-        self.game = MinesweeperGame.MinesweeperGame(side_length, bomb_amount)
+        self.game = MinesweeperGame.MinesweeperGame(width, height, bomb_amount)
+        self.create_game_board()
+        
+    def start_original_game(self):
+        width = 30
+        height = 16
+        bomb_amount = 99
+        self.width = width
+        self.height = height
+        self.bomb_amount = bomb_amount
+        self.game = MinesweeperGame.MinesweeperGame(width, height, bomb_amount)
         self.create_game_board()
 
     def create_game_board(self):
         self.clear_root()
         self.buttons = []
-        button_size = 30  
-        for i in range(self.side_length):
+        button_size = 30
+        # Create the button elements on the board
+        for i in range(self.height):
             row_buttons = []
-            for j in range(self.side_length):
-                button = tk.Button(self.root,bg=CELL,text='', width=button_size // 10, height=button_size // 20, font=("Arial", 14), command=partial(self.click, i, j))
-                button.grid(row=i, column=j, padx=1, pady=1)  
+            for j in range(self.width):
+                button = ctk.CTkButton(master=self.root, fg_color=CELL, text='', width=button_size, height=button_size, font=("Arial", 14), command=partial(self.click, i, j))
+                button.grid(row=i, column=j, padx=1, pady=1)
                 button.bind('<Button-3>', partial(self.flag, x=i, y=j))
                 row_buttons.append(button)
             self.buttons.append(row_buttons)
 
-        self.root.update_idletasks()  
-        
-        
-        grid_width = self.root.winfo_reqwidth()
-        grid_height = self.root.winfo_reqheight()
+        self.root.update_idletasks()
 
-        self.root.geometry(f"{grid_width }x{grid_height }")
+        grid_width = self.width * (button_size + 2)
+        grid_height = self.height * (button_size + 2)
+        self.root.geometry(f"{grid_width}x{grid_height}")
 
     def click(self, x, y):
         cell = self.game.grid[x][y]
@@ -71,14 +119,15 @@ class MinesweeperUI:
 
         if cell.is_revealed:
             return
-
+        if cell.is_flagged:
+            return
         if cell.is_bomb:
-            button.config(text='💣', state='disabled', bg= "red")
+            button.configure(text='💣', state='disabled', fg_color="red")
             self.show_game_over()
         else:
             cell.is_revealed = True
             self.game.revealed_cells += 1
-            button.config(text=str(cell.adjacent_bombs), state='disabled',bg = "white")
+            button.configure(text=str(cell.adjacent_bombs), state='disabled', fg_color="white")
             if cell.adjacent_bombs == 0:
                 self.reveal_empty(x, y)
             self.check_win()
@@ -89,30 +138,31 @@ class MinesweeperUI:
 
         if cell.is_revealed:
             return
-
+        
         if cell.is_flagged:
             cell.is_flagged = False
-            button.config(text='', font=("Arial", 14),bg = CELL)
+            button.configure(text='', font=("Arial", 14), fg_color=CELL)
         else:
+            #ctk has issues with buttons if it has emoji text so no flaf here:(
             cell.is_flagged = True
-            button.config(text='🚩', font=("Arial", 14), bg = "#f4af03")
+            button.configure(text='', font=("Arial", 14), fg_color=BUTTON)
 
     def reveal_empty(self, x, y):
         for i in range(-1, 2):
             for j in range(-1, 2):
                 nx, ny = x + i, y + j
-                if 0 <= nx < self.side_length and 0 <= ny < self.side_length:
+                if 0 <= nx < self.height and 0 <= ny < self.width:
                     if not self.game.grid[nx][ny].is_revealed:
                         self.click(nx, ny)
 
     def reveal_all_bombs(self):
-        for i in range(self.side_length):
-            for j in range(self.side_length):
+        for i in range(self.height):
+            for j in range(self.width):
                 if self.game.grid[i][j].is_bomb:
-                    self.buttons[i][j].config(text='💣', state='disabled')
+                    self.buttons[i][j].configure(text='💣', state='disabled')
 
     def check_win(self):
-        if self.game.revealed_cells == (self.side_length * self.side_length) - self.bomb_amount:
+        if self.game.revealed_cells == (self.width * self.height) - self.bomb_amount:
             self.show_win_message()
 
     def show_game_over(self):
@@ -136,4 +186,6 @@ class MinesweeperUI:
 
 if __name__ == "__main__":
     MinesweeperUI()
+
+
      
