@@ -31,6 +31,7 @@ class MinesweeperUI:
         width = self.grid_width_entry.get()
         height = self.grid_height_entry.get()
         max_mines = width * height - 1 
+        self.mine_count_entry.configure(to=max_mines, number_of_steps=max_mines - 1)
         if self.mine_count_entry.get() > max_mines:
          try:
           self.mine_count_entry.set(max_mines)
@@ -63,19 +64,20 @@ class MinesweeperUI:
         settings_frame.pack(pady=20, padx=20, fill="both", expand=True)
         # Grid width slider)
         self.grid_width_entry = ctk.CTkSlider(master=settings_frame, from_=1, to=30, number_of_steps=29, bg_color=BACKGROUNDLIGHT, command = self.update_grid_width_label)
-        self.my_label = ctk.CTkLabel(master=settings_frame, text=self.grid_width_entry.get()  , text_color="white", font=("Arial", 14))
+        self.my_label = ctk.CTkLabel(master=settings_frame, text="Width"  , text_color="white", font=("Arial", 14))
+        self.my_label.place(x=10,y=10)
         self.my_label.pack(pady=10)
         self.grid_width_entry.pack(pady=2)
         self.grid_width_entry.set(10)
         # Grid height slider
         self.grid_height_entry = ctk.CTkSlider(master=settings_frame, from_=1, to=30, number_of_steps=29, bg_color=BACKGROUNDLIGHT,command= self.update_grid_height_label)
-        self.height=ctk.CTkLabel(master=settings_frame,  text=self.grid_height_entry.get(), text_color="white", font=("Arial", 14))
+        self.height=ctk.CTkLabel(master=settings_frame,  text="Height", text_color="white", font=("Arial", 14))
         self.height.pack(pady=10)
         self.grid_height_entry.pack(pady=2)
         self.grid_height_entry.set(10)
         # Number of mines slider
         self.mine_count_entry = ctk.CTkSlider(master=settings_frame, from_=1, to=400, number_of_steps=399, bg_color=BACKGROUNDLIGHT,command = self.update_grid_mines_label)
-        self.my_label_mines=ctk.CTkLabel(master=settings_frame,  text= self.mine_count_entry.get(), text_color="white", font=("Arial", 14))
+        self.my_label_mines=ctk.CTkLabel(master=settings_frame,  text="Mines", text_color="white", font=("Arial", 14))
         self.my_label_mines.pack(pady=10)
         self.mine_count_entry.pack(pady=2)
         self.mine_count_entry.set(40)
