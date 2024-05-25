@@ -7,7 +7,9 @@ class MinesweeperGame:
         self.height = height
         self.bomb_amount = bomb_amount
         self.grid = self.initialize_grid()
-        self.revealed_cells = 0  
+        self.revealed_cells = 0 
+        self.game_over=False
+        self.mines_left=bomb_amount
 
     def initialize_grid(self):
         grid = [[Cell.Cell() for _ in range(self.width)] for _ in range(self.height)]
@@ -40,3 +42,7 @@ class MinesweeperGame:
                 if grid[nx][ny].is_bomb:
                     count += 1
         return count
+    
+    def is_mine(self,x,y):
+        return self.grid[x][y].is_bomb
+    
