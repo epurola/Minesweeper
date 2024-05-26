@@ -33,6 +33,62 @@ class GameDatabase:
     def get_all_records(self):
         self.cursor.execute("SELECT * FROM game_records")
         return self.cursor.fetchall()
+    
+    def get_best_time(self):
+        self.cursor.execute("SELECT MIN(duration) FROM game_records WHERE outcome = 'Win'")
+        result = self.cursor.fetchone()
+        return result[0] if result[0] is not None else "No wins yet"
+    def get_win_amount(self):
+        self.cursor.execute("SELECT COUNT(*) FROM game_records WHERE outcome = 'Win'")
+        result = self.cursor.fetchone()
+        return result[0] if result else 0
+    def get_loss_amount(self):
+        self.cursor.execute("SELECT COUNT(*) FROM game_records WHERE outcome = 'Loss'")
+        result = self.cursor.fetchone()
+        return result[0] if result else 0
+    def get_matches_amount(self):
+        self.cursor.execute("SELECT COUNT(*) FROM game_records WHERE outcome = 'Loss' OR outcome = 'Win'")
+        result = self.cursor.fetchone()
+        return result[0] if result else 0
+    def get_time_wasted(self):
+       self.cursor.execute("SELECT duration FROM game_records")
+       records = self.cursor.fetchall()
+       total_duration = 0
+
+       for record in records:
+         duration_str = record[0]  # Get the duration string from the record
+
+        # Split the duration string by ':'
+         hours, minutes, seconds = map(int, duration_str.split(':'))
+
+        # Calculate the total duration in seconds
+         total_seconds = hours * 3600 + minutes * 60 + seconds
+
+        # Add the game duration to the total duration
+         total_duration += total_seconds
+
+    # Convert total duration back to hours, minutes, and seconds
+       total_hours = total_duration // 3600
+       total_minutes = (total_duration % 3600) // 60
+       total_seconds = total_duration % 60
+
+    # Return the total duration in the original format
+       return f"{total_hours:02d}:{total_minutes:02d}:{total_seconds:02d}"
+        
+    def get_win_rate(self):
+    # Count the number of wins
+       self.cursor.execute("SELECT COUNT(*) FROM game_records WHERE outcome = 'Win'")
+       wins = self.cursor.fetchone()[0]
+
+       self.cursor.execute("SELECT COUNT(*) FROM game_records")
+       total_games = self.cursor.fetchone()[0]
+
+       if total_games == 0:
+        return 0  
+       win_rate = (wins / total_games) * 100
+       return round(win_rate, 2)
+
+    
 
     def close(self):
         self.connection.close()

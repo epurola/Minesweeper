@@ -9,6 +9,7 @@ class MinesweeperGame:
         self.grid = self.initialize_grid()
         self.revealed_cells = 0 
         self.game_over=False
+        self.win=False
         self.mines_left=bomb_amount
 
     def initialize_grid(self):

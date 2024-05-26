@@ -1,1 +1,1 @@
-records_frame.pack(pady=20)
+win
