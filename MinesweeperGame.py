@@ -11,6 +11,7 @@ class MinesweeperGame:
         self.game_over=False
         self.win=False
         self.mines_left=bomb_amount
+        self.turns=0
 
     def initialize_grid(self):
         grid = [[Cell.Cell() for _ in range(self.width)] for _ in range(self.height)]
