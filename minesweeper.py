@@ -30,9 +30,9 @@ class MinesweeperUI:
         self.root.geometry("500x400")
         ctk.CTkLabel(master=self.root, bg_color=BACKGROUND, text="Traditional Game 16x30", text_color="white", font=("Arial", 20)).pack(pady=30)
 
-        ctk.CTkButton(self.root, text="Start Game", fg_color=BUTTON, text_color="black", command=self.start_original_game, font=("Arial", 14)).pack()
-        ctk.CTkButton(self.root, text="Custom Game", fg_color=BUTTON, text_color="black", command=self.launch_custom_game_settings, font=("Arial", 14)).pack(pady=50)
-        ctk.CTkButton(self.root, text="Game Records", fg_color=BUTTON, text_color="black", command=self.show_game_records, font=("Arial", 14)).pack(pady=10)
+        ctk.CTkButton(self.root,width=200,height=40, text="Start Game", fg_color=BUTTON, text_color="black", command=self.start_original_game, font=("Arial", 14)).pack()
+        ctk.CTkButton(self.root,width=200,height=40, text="Custom Game", fg_color=BUTTON, text_color="black", command=self.launch_custom_game_settings, font=("Arial", 14)).pack(pady=50)
+        ctk.CTkButton(self.root,width=200,height=40, text="Game Records", fg_color=BUTTON, text_color="black", command=self.show_game_records, font=("Arial", 14)).pack()
         
     def update_mine_count_max(self):
         width = int(self.grid_width_entry.get())
@@ -122,13 +122,9 @@ class MinesweeperUI:
      self.clear_root()
     
      game_frame = ctk.CTkFrame(master=self.root, fg_color=BACKGROUNDLIGHT)
-     game_frame.grid(row=0, column=0, padx=20, pady=20)
-    
+     game_frame.grid(row=1, column=1, padx=20, pady=5)
      self.buttons = []
      button_size = 30
-    
-     self.root.grid_rowconfigure(0, weight=1)
-     self.root.grid_columnconfigure(0, weight=1)
 
     # Create the button elements on the board
      for i in range(self.height):
@@ -145,8 +141,10 @@ class MinesweeperUI:
      grid_width = self.width * (button_size + 2)
      grid_height = self.height * (button_size + 2)
      self.timer_label = ctk.CTkLabel(master=self.root, text="Time: 00:00:00", text_color="white", font=("Arial", 14), bg_color=BACKGROUNDLIGHT)
-     self.timer_label.grid(row=1, column=0, padx=2, pady=2)
+     self.timer_label.grid(row=0, column=1, padx=2, pady=2)
+     ctk.CTkButton(self.root, text="Back", text_color="white", command=self.create_start_menu, font=("Arial", 14)).grid(row=2, column=0, columnspan=2, pady=10, sticky="s")
      self.root.geometry(f"{int(grid_width + 40)}x{int(grid_height + 80)}")
+    
     
      self.start_time = datetime.now()
      self.update_timer()
@@ -162,8 +160,6 @@ class MinesweeperUI:
          button_size = 500 / self.grid_height_entry.get()
         else:
             button_size = 30
-        self.root.grid_rowconfigure(0, weight=1)
-        self.root.grid_columnconfigure(0, weight=1)
         
         for i in range(int(self.grid_height_entry.get())):
             self.row_buttons = []
@@ -179,7 +175,8 @@ class MinesweeperUI:
         grid_height = self.grid_height_entry.get() * (button_size +2)
         self.timer_label = ctk.CTkLabel(master=self.root, text="Time: 00:00:00",text_color="white", font=("Arial", 14), bg_color=BACKGROUNDLIGHT)
         self.timer_label.grid(row=0, column=1,padx=2, pady=2)
-        self.root.geometry(f"{int(grid_width)}x{int(grid_height)}")
+        ctk.CTkButton(self.root, text="Back", text_color="white", command=self.create_start_menu, font=("Arial", 14)).grid(row=1, column=0, columnspan=2, pady=10, sticky="s")
+        self.root.geometry(f"{int(grid_width+40)}x{int(grid_height)+80}")
         
         self.start_time = datetime.now()
         self.update_timer()
@@ -307,6 +304,8 @@ class MinesweeperUI:
     
      best_time_frame = ctk.CTkFrame(self.root, fg_color=BACKGROUND)
      best_time_frame.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
+     self.root.grid_rowconfigure(0, weight=1)
+     self.root.grid_columnconfigure(0, weight=1)
 
      records = self.db.get_all_records()
 
