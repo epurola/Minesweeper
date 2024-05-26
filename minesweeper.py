@@ -19,7 +19,7 @@ class MinesweeperUI:
         self.root = ctk.CTk()
         self.root.title("\U0001F4A3 Minesweeper")
         self.root.config(bg=BACKGROUND)
-        self.game_records = []  # List to store game records
+        self.game_records = []  
         self.db = GameDatabase()
         self.create_start_menu()
         self.root.mainloop()
@@ -318,7 +318,7 @@ class MinesweeperUI:
             formatted_record = f"\nGAME: {record_id}\n Date: {date}\n Time: {time_of_day}\n Duration: {duration}\n Outcome: {outcome}\n Mines Left: {mines_left}"
             ctk.CTkLabel(records_frame, text=formatted_record, text_color="white", font=("Arial", 12), anchor="center").pack(pady=1)
 
-    # Display the best time on the left side
+    # Display the best time on the right side
      best_time = self.db.get_best_time()
      wins = self.db.get_win_amount()
      loss =self.db.get_loss_amount()
@@ -334,11 +334,8 @@ class MinesweeperUI:
         ctk.CTkLabel(best_time_frame, text=f"Time Wasted: {time_wasted}", text_color="white", font=("Arial", 14)).pack(pady=10)
         
 
-    # Add back button at the bottom
      ctk.CTkButton(self.root, text="Back", text_color="white", command=self.create_start_menu, font=("Arial", 14)).grid(row=1, column=0, columnspan=2, pady=10, sticky="s")
            
-   
-
 
 if __name__ == "__main__":
     MinesweeperUI()
