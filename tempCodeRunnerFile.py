@@ -1,3 +1,1 @@
-self.reveal_all_bombs()
-            self.root.after(5000, self.show_game_over)
-            self.game_over()
+self.root.geometry(f"{int(grid_width+40)}x{int(grid_height)+80}")
