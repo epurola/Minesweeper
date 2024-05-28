@@ -196,6 +196,9 @@ class MinesweeperUI:
         
     def create_original_game_board(self):
      self.clear_root()
+
+     self.root.grid_rowconfigure(1, weight=1, minsize=50)
+     self.root.grid_columnconfigure(1, weight=1, minsize=50)
     
      game_frame = ctk.CTkFrame(master=self.root, fg_color=BACKGROUNDLIGHT)
      game_frame.grid(row=1, column=1, padx=20, pady=5)
@@ -244,7 +247,8 @@ class MinesweeperUI:
     def create_game_board(self):
         self.clear_root()
 
-
+        self.root.grid_rowconfigure(1, weight=1, minsize=50)
+        self.root.grid_columnconfigure(1, weight=1, minsize=50)
         game_frame = ctk.CTkFrame(master=self.root, fg_color=BACKGROUNDLIGHT)
         game_frame.grid(row=1, column=1, padx=20, pady=5)
 
