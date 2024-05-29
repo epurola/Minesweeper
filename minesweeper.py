@@ -252,7 +252,7 @@ class MinesweeperUI:
         self.root.grid_rowconfigure(1, weight=1, minsize=50)
         self.root.grid_columnconfigure(1, weight=1, minsize=50)
         game_frame = ctk.CTkFrame(master=self.root, fg_color=BACKGROUNDLIGHT)
-        game_frame.grid(row=1, column=1, padx=20, pady=5)
+        game_frame.grid(row=1, column=1, padx=20, pady=0)
 
         
         self.buttons = []
@@ -499,7 +499,7 @@ class MinesweeperUI:
      records_frame.grid(row=1, column=0, padx=90, pady=100, sticky="new")
     
      best_time_frame = ctk.CTkFrame(self.root, fg_color=BACKGROUND, bg_color=BACKGROUND)
-     best_time_frame.grid(row=1, column=1, padx=90, pady=105, sticky="nsew")
+     best_time_frame.grid(row=1, column=1, padx=90, pady=110, sticky="nsew")
      
 
      records = self.db.get_all_records()

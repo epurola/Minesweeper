@@ -1,1 +1,0 @@
-self.root.geometry(f"{int(grid_width+40)}x{int(grid_height)+80}")
