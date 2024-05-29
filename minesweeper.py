@@ -34,12 +34,16 @@ class MinesweeperUI:
     def create_start_menu(self):
         self.clear_root()
         self.root.geometry("1100x700")
-        ctk.CTkLabel(master=self.root, 
+        self.root.grid_rowconfigure(1, weight=1, minsize=50)
+        self.root.grid_columnconfigure(1, weight=1, minsize=50)
+        main_frame=ctk.CTkFrame(master=self.root, fg_color=BACKGROUND)
+        main_frame.grid(row=1, column=1, padx=20, pady=5)
+        ctk.CTkLabel(master=main_frame, 
                      bg_color=BACKGROUND, 
                      text="Traditional Game 30x16", 
                      text_color="white", 
-                     font=("Arial", 20)).pack(pady=30)
-        ctk.CTkButton(self.root,
+                     font=("Arial", 20)).pack(pady=20)
+        ctk.CTkButton(main_frame,
                       width=200,
                       height=40, 
                       text="Start Game", 
@@ -47,13 +51,13 @@ class MinesweeperUI:
                       text_color="black", 
                       command=self.start_original_game, 
                       font=("Arial", 14)).pack()
-        ctk.CTkButton(self.root,width=200,
+        ctk.CTkButton(main_frame,width=200,
                       height=40, text="Custom Game", 
                       fg_color=BUTTON, 
                       text_color="black", 
                       command=self.launch_custom_game_settings, 
                       font=("Arial", 14)).pack(pady=50)
-        ctk.CTkButton(self.root,width=200,
+        ctk.CTkButton(main_frame,width=200,
                       height=40, 
                       text="Game Records", 
                       fg_color=BUTTON, 
@@ -93,12 +97,10 @@ class MinesweeperUI:
         
     def launch_custom_game_settings(self):
         self.clear_root()
-        settings_frame = ctk.CTkFrame(master=self.root, 
-                                      fg_color=BACKGROUNDLIGHT)
-        settings_frame.pack(pady=20, 
-                            padx=20, 
-                            fill="both", 
-                            expand=True)
+        self.root.grid_rowconfigure(1, weight=1, minsize=50)
+        self.root.grid_columnconfigure(1, weight=1, minsize=50)
+        settings_frame=ctk.CTkFrame(master=self.root, fg_color=BACKGROUND)
+        settings_frame.grid(row=1, column=1, padx=20, pady=5)
         # Grid width slider
         self.grid_width_entry = ctk.CTkSlider(master=settings_frame, 
                                               from_=2, 
@@ -490,14 +492,15 @@ class MinesweeperUI:
         
     def show_game_records(self):
      self.clear_root()
-
-     records_frame = ctk.CTkScrollableFrame(self.root, fg_color=BACKGROUNDLIGHT)
-     records_frame.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
+     self.root.grid_rowconfigure(1, weight=1 )
+     self.root.grid_columnconfigure(1, weight=1)
+     records_frame = ctk.CTkScrollableFrame(self.root, fg_color=BACKGROUNDLIGHT,width= 500,
+     height = 400,)
+     records_frame.grid(row=1, column=0, padx=90, pady=100, sticky="new")
     
      best_time_frame = ctk.CTkFrame(self.root, fg_color=BACKGROUND, bg_color=BACKGROUND)
-     best_time_frame.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
-     self.root.grid_rowconfigure(0, weight=1)
-     self.root.grid_columnconfigure(0, weight=1)
+     best_time_frame.grid(row=1, column=1, padx=90, pady=105, sticky="nsew")
+     
 
      records = self.db.get_all_records()
 
@@ -534,6 +537,7 @@ class MinesweeperUI:
                    text_color="white", 
                    command=self.create_start_menu, 
                    font=("Arial", 14)).grid(row=1, column=0, columnspan=2, pady=10, sticky="s")
+     
            
 
 if __name__ == "__main__":
