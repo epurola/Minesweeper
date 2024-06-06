@@ -192,7 +192,6 @@ class MinesweeperUI:
         self.width = 30
         self.height = 16
         bomb_amount = 99
-        self.bomb_amount = bomb_amount
         self.game = MinesweeperGame.MinesweeperGame(self.width, self.height, bomb_amount)
         self.create_original_game_board()
         
