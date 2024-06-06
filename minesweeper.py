@@ -339,18 +339,13 @@ class MinesweeperUI:
             return
         if cell.is_flagged:
             return
-        if cell.is_bomb:
-            button.configure(text='💣', state='disabled')
-            self.reveal_all_bombs()
-            self.root.after(5000, self.show_game_over)
-            self.game_over()
         else:
             cell.is_revealed = True
             self.game.revealed_cells += 1
             button.configure(text=str(cell.adjacent_bombs), state='disabled', fg_color="white")
             if cell.adjacent_bombs == 0:
                 self.reveal_empty(x, y)
-    #No flag emoji because for some reson it makes the button not clickable in the centre:(
+    #No flag emoji because for some reason it makes the button not clickable in the centre:(
     def flag(self, event, x, y):
      button = self.buttons[x][y]
      cell = self.game.grid[x][y]
